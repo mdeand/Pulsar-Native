@@ -53,20 +53,29 @@
                 xorg.libXi
                 xorg.libX11
                 xorg.libxcb
+                nixfmt
               ];
 
+              RUST_SRC_PATH = "${
+                pkgs.rust-bin.stable.latest.default.override {
+                  extensions = [ "rust-src" ];
+                }
+              }/lib/rustlib/src/rust/library";
+
               shellHook = ''
-                export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
-                  pkgs.wayland
-                  pkgs.libxkbcommon
-                  pkgs.libGL
-                  pkgs.vulkan-loader
-                  pkgs.xorg.libXcursor
-                  pkgs.xorg.libXrandr
-                  pkgs.xorg.libXi
-                  pkgs.xorg.libX11
-                  pkgs.xorg.libxcb
-                ]}:$LD_LIBRARY_PATH
+                export LD_LIBRARY_PATH=${
+                  pkgs.lib.makeLibraryPath [
+                    pkgs.wayland
+                    pkgs.libxkbcommon
+                    pkgs.libGL
+                    pkgs.vulkan-loader
+                    pkgs.xorg.libXcursor
+                    pkgs.xorg.libXrandr
+                    pkgs.xorg.libXi
+                    pkgs.xorg.libX11
+                    pkgs.xorg.libxcb
+                  ]
+                }:$LD_LIBRARY_PATH
                 export VK_LAYER_PATH=${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d
               '';
             };
